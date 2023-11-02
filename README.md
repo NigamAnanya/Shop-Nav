@@ -1,3 +1,10 @@
+![image](https://github.com/NigamAnanya/Shop-Nav/assets/104274005/d924b2b8-565c-488c-ade9-bc03f51cb8ba)
+
+
+Link for the website - https://shop-nav.vercel.app/
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
