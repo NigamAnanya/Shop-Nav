@@ -12,7 +12,7 @@ const initialProducts = [
     image: 'https://media.post.rvohealth.io/wp-content/uploads/2020/08/beauty-skin-care-cosmetics_thumb.jpg', 
     title: 'COSMETICS', 
     description: 'Cosmetics are products you apply to your body to clean it, make it more attractive, or change the way it looks. They include: Hair dyes, Makeup. They can come into multiple types with variety of ranges.', 
-    price: '200' },
+    price: '600' },
   { id: 3, 
     image: 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/99486859-0ff3-46b4-949b-2d16af2ad421/custom-nike-dunk-high-by-you-shoes.png', 
     title: 'SHOES', 
@@ -27,8 +27,39 @@ const initialProducts = [
         image: 'https://stationers.pk/cdn/shop/articles/7_Must_Have_Student_Stationery_Supplies_In_High_School.jpg?v=1635331870', 
         title: 'STATIONARY', 
         description: 'Stationery refers to commercially manufactured writing materials, including cut paper, envelopes, writing implements, continuous form paper, and other office supplies.', 
-        price: '250' },
-  // ... add more products
+        price: '50' 
+      },
+      { 
+        id: 6, 
+        image: 'https://bd.gaadicdn.com/processedimages/suzuki/hayabusa/640X309/hayabusa6433f99fc006a.jpg', 
+        title: 'BIKES', 
+        description: 'Bicycle, also called bike, two-wheeled steerable machine that is pedaled by the riders feet. On a standard bicycle the wheels are mounted in-line in a metal frame, with the front wheel held in a rotatable fork. There are variety of bikes available', 
+        price: '100' 
+      },
+      { id: 7, 
+        image: 'https://www.designinfo.in/wp-content/uploads/2023/01/Apple-iPhone-14-Pro-Mobile-Phone-493177786-i-1-1200Wx1200H-optimized.jpeg', 
+        title: 'MOBILE PHONE', 
+        description: 'a portable telephone that can make and receive calls over a radio frequency link while the user is moving within a telephone service area, as opposed to a fixed-location phone. There are various companies for mobile phones.', 
+        price: '200' 
+      },
+      { id: 8, 
+        image: 'https://img.etimg.com/thumb/width-1200,height-900,imgsize-31284,resizemode-75,msid-99794647/top-trending-products/electronics/laptops/best-asus-laptops-seamless-performance-and-unparalleled-quality-at-unbeatable-value.jpg', 
+        title: 'LAPTOPS', 
+        description: 'Durable 40.64cms (16) AMD Ryzen™-powered business laptop, Up to 40GB memory & 1TB SSD storage, for speed and productivity. Stunning WQXGA (2560 x 1600) display option. Various laptop companies are INTEL , APPLE , LENOVO , DELL.', 
+        price: '400' 
+      },
+      { id: 9, 
+        image: 'https://akm-img-a-in.tosshub.com/indiatoday/images/story/202305/1_2-sixteen_nine.jpg?VersionId=euPBmayE5g7G58NBaFQ_SKWYYLosEfNb', 
+        title: 'HEADPHONES', 
+        description: 'ANC Hybrid Active Noise Cancelling Bluetooth Wireless Over Ear Headphones with Up to 65H Playtime, ASAP Charge, Ambient Sound Mode, Immersive Sound, Carry Pouch(Gunmetal Grey). 1 year warranty from the date of purchase.', 
+        price: '1000' 
+      },
+      { id: 10, 
+        image: 'https://s7g10.scene7.com/is/image/kerry/cocktails-with-fruit-hero?ts=1663162256864&dpr=off&$TERTIARYHERO-Small$', 
+        title: 'BEVERAGES', 
+        description: 'A beverage is any type of drink. Its something you might offer a guest in your house, its also the favorite moniker of companies that manufacture both soda and juice — they call themselves beverage companies. Several beverages companies like pepsi,coke.', 
+        price: '70' 
+      },
 ];
 
 const Products = () => {
@@ -37,6 +68,8 @@ const Products = () => {
   const [filterValue, setFilterValue] = useState('');
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' for ascending, 'desc' for descending
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   const handleFilterChange = (filterCategory:string) => {
     setFilter(filterCategory);
@@ -53,6 +86,8 @@ const Products = () => {
   const handleSortOrderChange = (order:any) => {
     setSortOrder(order);
   };
+
+  
 
   const getFilteredAndSortedProducts = () => {
     return products
@@ -88,6 +123,35 @@ const Products = () => {
         return 0;
       });
   };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = getFilteredAndSortedProducts().slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageClick = (event:any) => {
+    setCurrentPage(Number(event.target.id));
+  };
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(products.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const renderPageNumbers = pageNumbers.map(number => {
+    return (
+      <li
+        key={number.toString()} // Convert number to string for key
+        id={number.toString()} // Convert number to string for id
+        onClick={handlePageClick}
+        className={currentPage === number ? 'bg-gray-800' : 'bg-black'}
+        style={{ cursor: 'pointer', padding: '10px', margin: '2px' }}
+      >
+        {number}
+      </li>
+    );
+  });
+  
+
   return (
     <div className='bg-gray-200 h-[100%] pb-[30px]'>
       <div className='p-[25px] border-b border-black text-center'>
@@ -127,7 +191,7 @@ const Products = () => {
       </div>
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mx-[15px]'>
-        {getFilteredAndSortedProducts().map((product) => (
+      {currentItems.map((product) => (
           <div key={product.id} className='flex flex-col p-4 rounded-2xl bg-gray-600 shadow-2xl'>
             <div>
               <img src={product.image} alt={product.title} className='h-[300px] md:h-[300px] w-full rounded-xl object-cover mb-5'/>
@@ -143,6 +207,9 @@ const Products = () => {
           </div>
         ))}
       </div>
+      <ul className='flex justify-center'>
+        {renderPageNumbers}
+      </ul>
     </div>
   );
 };
